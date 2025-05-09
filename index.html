@@ -57,7 +57,7 @@
             border: 1px solid #D1D5DB;
             border-radius: 6px;
             font-family: 'Roboto', sans-serif;
-            font-size: 16px; /* Prevent zoom on mobile input focus */
+            font-size: 16px;
             transition: border-color 0.2s;
             box-sizing: border-box;
         }
@@ -273,7 +273,7 @@
             border: 1px solid #D1D5DB;
             border-radius: 6px;
             font-family: 'Roboto', sans-serif;
-            font-size: 16px; /* Prevent zoom on mobile input focus */
+            font-size: 16px;
         }
         .password-box button {
             margin: 10px 5px;
@@ -331,7 +331,10 @@
         </div>
     </div>
 
-    <button id="start-test" type="button">Bắt đầu làm bài</button>
+    <div class="button-group">
+        <button id="start-test" type="button">Bắt đầu làm bài</button>
+        <button id="history-test" type="button" onclick="showPasswordModal()">Lịch sử kiểm tra</button>
+    </div>
     <div id="message-info" class="error-message"></div>
 
     <div id="timer" class="timer" style="display: none;">Thời gian còn lại: 25:00</div>
@@ -1246,6 +1249,7 @@
 
             startTime = new Date();
             document.getElementById('start-test').style.display = 'none';
+            document.getElementById('history-test').style.display = 'none';
             document.querySelectorAll('.question-section').forEach(section => {
                 section.style.display = 'block';
             });
