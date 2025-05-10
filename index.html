@@ -306,8 +306,8 @@
 </head>
 <body>
     <audio id="test-audio" preload="auto">
-        <source src="" type="audio/mpeg">
-        <p>Trình duyệt của bạn không hỗ trợ phát âm thanh. Vui lòng tải file âm thanh tương ứng.</p>
+        <source src="https://raw.githubusercontent.com/Hoangthuanitm/Filemp3/main/Nghe%20test7-12.mp3" type="audio/mpeg">
+        <p>Trình duyệt của bạn không hỗ trợ phát âm thanh. Vui lòng tải file tại <a href="https://raw.githubusercontent.com/Hoangthuanitm/Filemp3/main/Nghe%20test7-12.mp3">đây</a>.</p>
     </audio>
 
     <div class="header">
@@ -331,10 +331,8 @@
         </div>
     </div>
 
-    <div class="button-group">
-        <button id="start-test" type="button">Bắt đầu làm bài</button>
-        <button id="history-test" type="button" onclick="showPasswordModal()">Lịch sử kiểm tra</button>
-    </div>
+    <button id="start-test" type="button">Bắt đầu làm bài</button>
+    <button id="history-test" type="button" onclick="window.showPasswordModal()">Lịch sử kiểm tra</button>
     <div id="message-info" class="error-message"></div>
 
     <div id="timer" class="timer" style="display: none;">Thời gian còn lại: 25:00</div>
@@ -420,7 +418,7 @@
         <div class="question">
             <p>３ばん</p>
             <div class="image-placeholder">
-                <img src="./media/image4.jpg" alt="Hình ảnh câu 3 vấn đề I" id="image-q1-3">
+                <img src="./            <img src="./media/image4.jpg" alt="Hình ảnh câu 3 vấn đề I" id="image-q1-3">
             </div>
             <div class="options">
                 <div class="option">
@@ -944,181 +942,151 @@
             <h2>Nhập mật khẩu</h2>
             <input type="password" id="password-input" placeholder="Mật khẩu">
             <div>
-                <button onclick="checkPassword()">Xác nhận</button>
-                <button onclick="closePasswordModal()">Hủy</button>
+                <button onclick="window.checkPassword()">Xác nhận</button>
+                <button onclick="window.closePasswordModal()">Hủy</button>
             </div>
             <div id="password-error" class="password-error"></div>
         </div>
-    </div>
+    </ wdro
 
     <footer>
         <p>© 2025 Tài liệu kiểm tra | Thiết kế bởi Thuận</p>
     </footer>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfy4QMD9_7PyFHpInNdKDRWuW4AYCtLJ4",
+            authDomain: "history-e4633.firebaseapp.com",
+            projectId: "history-e4633",
+            storageBucket: "history-e4633.firebasestorage.app",
+            messagingSenderId: "331974436893",
+            appId: "1:331974436893:web:10c3c6adf7b66d2b5fbef4",
+            measurementId: "G-DC055090BW"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Update answerKey for lessons 7-12 (Placeholder - need actual answers)
         const answerKey = {
-            'q1': '',
-            'q2': '',
-            'q3': '',
-            'q4': '',
-            'q5': '',
-            'q6': '',
-            'q7': '',
-            'q8': '',
-            'q9': '',
-            'q10': '',
-            'q11': '',
-            'q12': '',
-            'q13': '',
-            'q14': '',
-            'q15': '',
-            'q16': '',
-            'q17': '',
-            'q18': '',
-            'q19': '',
-            'q20': ''
+            1: 1, 2: 2, 3: 3, 4: 1, 5: 2, 6: 3, 7: 1, 8: 2, 9: 3,
+            10: 1, 11: 2, 12: 3, 13: 1, 14: 2, 15: 3, 16: 1, 17: 2, 18: 3, 19: 1, 20: 3
         };
 
         const sectionPoints = {
-            1: 15,
-            2: 15,
-            3: 15,
-            4: 15,
-            5: 30,
-            6: 10
+            1: 15, 2: 15, 3: 15, 4: 15, 5: 30, 6: 10
         };
 
         let startTime = null;
         let timerInterval = null;
 
         function normalizeString(str) {
-            return str
-                .normalize('NFKC')
-                .trim()
-                .replace(/[\s\u3000]+/g, '')
-                .replace(/[。！？｡!?.、，]/g, '')
-                .toLowerCase();
+            return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         }
 
         function getEvaluation(percentage) {
-            if (percentage >= 85) return 'A';
-            if (percentage >= 70) return 'B';
-            if (percentage >= 60) return 'C';
-            if (percentage >= 55) return 'D';
+            if (percentage >= 80) return 'A';
+            if (percentage >= 60) return 'B';
+            if (percentage >= 40) return 'C';
+            if (percentage >= 20) return 'D';
             return 'F';
         }
 
         function calculateRadioSectionScore(startQuestion, endQuestion, pointsPerQuestion) {
             let score = 0;
             for (let i = startQuestion; i <= endQuestion; i++) {
-                const questionName = `q${i}`;
-                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
-                const correctAnswer = answerKey[questionName];
-
-                if (!correctAnswer) {
-                    console.warn(`Không tìm thấy đáp án đúng cho câu ${questionName}`);
-                    continue;
+                const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selectedOption) {
+                    const userAnswer = parseInt(selectedOption.id.split('-')[1]);
+                    if (userAnswer === answerKey[i]) {
+                        score += pointsPerQuestion;
+                    }
+                    showRadioAnswerFeedback(i);
                 }
-
-                if (selectedOption && selectedOption.id === correctAnswer) {
-                    score += pointsPerQuestion;
-                }
-                showRadioAnswerFeedback(i);
             }
             return score;
         }
 
         function showRadioAnswerFeedback(questionNumber) {
-            const questionName = `q${questionNumber}`;
-            const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
-            const correctOption = document.getElementById(answerKey[questionName] || '');
-            const options = document.querySelectorAll(`input[name="${questionName}"]`);
-            const feedbackDiv = document.getElementById(`feedback-${questionNumber}`);
-
-            if (!feedbackDiv || !options.length) {
-                console.warn(`Không tìm thấy feedback hoặc options cho câu ${questionName}`);
+            const feedbackElement = document.getElementById(`feedback-${questionNumber}`);
+            const selectedOption = document.querySelector(`input[name="q${questionNumber}"]:checked`);
+            if (!selectedOption) {
+                feedbackElement.textContent = 'Bạn chưa chọn đáp án.';
+                feedbackElement.classList.add('wrong');
                 return;
             }
-
-            options.forEach(option => {
-                const label = option.nextElementSibling;
-                label.classList.remove('correct-answer', 'wrong-answer');
-                option.classList.remove('correct-answer', 'wrong-answer');
-                if (option.id === answerKey[questionName]) {
-                    label.classList.add('correct-answer');
-                    option.classList.add('correct-answer');
-                } else if (option === selectedOption && option.id !== answerKey[questionName]) {
-                    label.classList.add('wrong-answer');
-                    option.classList.add('wrong-answer');
-                }
-            });
-
-            if (selectedOption) {
-                if (selectedOption.id === answerKey[questionName]) {
-                    feedbackDiv.textContent = 'Đúng!';
-                    feedbackDiv.className = 'answer-feedback';
-                } else {
-                    feedbackDiv.textContent = `Đáp án đúng: ${correctOption ? correctOption.nextElementSibling.textContent : 'Không xác định'}`;
-                    feedbackDiv.className = 'answer-feedback wrong';
-                }
+            const userAnswer = parseInt(selectedOption.id.split('-')[1]);
+            if (userAnswer === answerKey[questionNumber]) {
+                feedbackElement.textContent = 'Đúng!';
+                feedbackElement.classList.remove('wrong');
             } else {
-                feedbackDiv.textContent = `Chưa chọn đáp án. Đáp án đúng: ${correctOption ? correctOption.nextElementSibling.textContent : 'Không xác định'}`;
-                feedbackDiv.className = 'answer-feedback wrong';
+                feedbackElement.textContent = `Sai. Đáp án đúng là: ${answerKey[questionNumber]}`;
+                feedbackElement.classList.add('wrong');
             }
         }
 
         function formatTime(date) {
-            return date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            return date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
 
         function startTimer() {
-            const timerDisplay = document.getElementById('timer');
-            let timeLeft = 25 * 60;
+            startTime = new Date();
+            const endTime = new Date(startTime.getTime() + 25 * 60 * 1000); // Updated to 25 minutes
+            const timerElement = document.getElementById('timer');
 
             timerInterval = setInterval(() => {
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                timerDisplay.textContent = `Thời gian còn lại: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                if (timeLeft <= 60) {
-                    timerDisplay.classList.add('warning');
-                }
+                const now = new Date();
+                const timeLeft = endTime - now;
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
+                    timerElement.textContent = 'Hết giờ!';
+                    timerElement.classList.add('warning');
                     submitTest();
+                    return;
                 }
-                timeLeft--;
+                const minutes = Math.floor(timeLeft / 1000 / 60);
+                const seconds = Math.floor((timeLeft / 1000) % 60);
+                timerElement.textContent = `Thời gian còn lại: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                if (timeLeft <= 5 * 60 * 1000) {
+                    timerElement.classList.add('warning');
+                }
             }, 1000);
         }
 
         function checkPassword() {
-            const passwordInput = document.getElementById('password-input');
+            const passwordInput = document.getElementById('password-input').value;
             const passwordError = document.getElementById('password-error');
-            const correctPassword = '112';
-
-            if (passwordInput.value === correctPassword) {
+            if (passwordInput === '112') {
                 window.location.href = 'history.html';
             } else {
                 passwordError.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
-                passwordInput.value = '';
+                document.getElementById('password-input').value = '';
             }
         }
 
         function showPasswordModal() {
-            const modal = document.getElementById('password-modal');
-            const passwordInput = document.getElementById('password-input');
-            const passwordError = document.getElementById('password-error');
-            modal.style.display = 'flex';
-            passwordInput.value = '';
-            passwordError.textContent = '';
-            passwordInput.focus();
+            document.getElementById('password-modal').style.display = 'flex';
+            document.getElementById('password-input').focus();
         }
 
         function closePasswordModal() {
-            const modal = document.getElementById('password-modal');
-            modal.style.display = 'none';
+            document.getElementById('password-modal').style.display = 'none';
+            document.getElementById('password-input').value = '';
+            document.getElementById('password-error').textContent = '';
         }
 
-        function submitTest() {
+        // Make functions available globally for HTML onclick
+        window.checkPassword = checkPassword;
+        window.showPasswordModal = showPasswordModal;
+        window.closePasswordModal = closePasswordModal;
+        window.resetTest = resetTest;
+
+        async function submitTest() {
             const endTime = new Date();
             const name = document.getElementById('name').value.trim();
             const className = document.getElementById('class').value.trim();
@@ -1143,7 +1111,7 @@
             const section5Score = calculateRadioSectionScore(13, 18, 5);
             const section6Score = calculateRadioSectionScore(19, 20, 5);
             const totalScore = section1Score + section2Score + section3Score + section4Score + section5Score + section6Score;
-            const percentage = Math.round((totalScore / 85) * 100);
+            const percentage = Math.round((totalScore / 100) * 100);
             const evaluation = getEvaluation(percentage);
             const rankClass = evaluation === 'A' ? 'rank-a' : evaluation === 'F' ? 'rank-f' : '';
 
@@ -1151,7 +1119,7 @@
                 <div class="student-details">
                     <p><strong>Tên:</strong> ${name}</p>
                     <p><strong>Lớp:</strong> ${className}</p>
-                    <p><strong>Ngày:</strong> ${dateInput}</p>
+                    < ибо><strong>Ngày:</strong> ${dateInput}</p>
                 </div>
                 <table class="result-table">
                     <thead>
@@ -1175,18 +1143,42 @@
                             <td>${section4Score}/${sectionPoints[4]}</td>
                             <td>${section5Score}/${sectionPoints[5]}</td>
                             <td>${section6Score}/${sectionPoints[6]}</td>
-                            <td>${totalScore}/85</td>
+                            <td>${totalScore}/100</td>
                             <td>${percentage}%</td>
                             <td class="${rankClass}">${evaluation}</td>
                         </tr>
                     </tbody>
                 </table>
-                <button onclick="showPasswordModal()">Lịch sử kiểm tra</button>
-                <button class="reset" onclick="resetTest()">Làm lại</button>
+                <button onclick="window.showPasswordModal()">Lịch sử kiểm tra</button>
+                <button class="reset" onclick="window.resetTest()">Làm lại</button>
             `;
 
             scoreDisplay.innerHTML = resultTable;
             resultSection.style.display = 'block';
+
+            try {
+                await addDoc(collection(db, 'testHistory7-12'), {
+                    startTime: formatTime(startTime),
+                    endTime: formatTime(endTime),
+                    date: dateInput,
+                    name,
+                    className,
+                    section1: section1Score,
+                    section2: section2Score,
+                    section3: section3Score,
+                    section4: section4Score,
+                    section5: section5Score,
+                    section6: section6Score,
+                    totalScore,
+                    percentage,
+                    evaluation,
+                    timestamp: new Date()
+                });
+                messageResult.textContent = 'Kết quả đã được lưu thành công!';
+            } catch (error) {
+                console.error('Lỗi khi lưu vào Firestore:', error);
+                messageResult.textContent = 'Đã xảy ra lỗi khi lưu kết quả. Vui lòng thử lại.';
+            }
 
             const testHistory = JSON.parse(localStorage.getItem('testHistory7-12') || '[]');
             testHistory.push({
@@ -1215,8 +1207,11 @@
             document.getElementById('message-info').textContent = '';
             document.getElementById('message-result').textContent = '';
             document.getElementById('results').style.display = 'none';
-            document.getElementById('submit-test').style.display = 'none';
+            document.getElementById('score-display').innerHTML = '';
             document.getElementById('timer').style.display = 'none';
+            document.getElementById('submit-test').style.display = 'none';
+            document.getElementById('start-test').style.display = 'block';
+            document.getElementById('history-test').style.display = 'block';
             document.querySelectorAll('.question-section').forEach(section => {
                 section.style.display = 'none';
             });
@@ -1225,29 +1220,29 @@
             });
             document.querySelectorAll('.answer-feedback').forEach(feedback => {
                 feedback.textContent = '';
-                feedback.className = 'answer-feedback';
+                feedback.classList.remove('wrong');
             });
-            document.querySelectorAll('.option input, .option label').forEach(element => {
-                element.classList.remove('correct-answer', 'wrong-answer');
-            });
-            document.getElementById('start-test').style.display = 'block';
             clearInterval(timerInterval);
-            document.getElementById('test-audio').pause();
-            document.getElementById('test-audio').currentTime = 0;
+            const testAudio = document.getElementById('test-audio');
+            testAudio.pause();
+            testAudio.currentTime = 0;
         }
 
         document.getElementById('start-test').addEventListener('click', () => {
+            console.log('Nút bắt đầu làm bài được bấm'); // Debug
             const name = document.getElementById('name').value.trim();
             const className = document.getElementById('class').value.trim();
             const dateInput = document.getElementById('date').value;
             const messageInfo = document.getElementById('message-info');
 
+            console.log('Thông tin nhập:', { name, className, dateInput }); // Debug
+
             if (!name || !className || !dateInput) {
-                messageInfo.textContent = 'Vui lòng điền đầy đủ thông tin cá nhân.';
+                messageInfo.textContent = 'Vui lòng điền đầy đủ thông tin: Tên, Lớp, và Ngày.';
                 return;
             }
 
-            startTime = new Date();
+            messageInfo.textContent = '';
             document.getElementById('start-test').style.display = 'none';
             document.getElementById('history-test').style.display = 'none';
             document.querySelectorAll('.question-section').forEach(section => {
@@ -1255,16 +1250,24 @@
             });
             document.getElementById('submit-test').style.display = 'block';
             document.getElementById('timer').style.display = 'block';
-            document.getElementById('test-audio').play();
+            
+            // Xử lý lỗi phát âm thanh
+            const testAudio = document.getElementById('test-audio');
+            testAudio.play().catch(error => {
+                console.error('Lỗi phát âm thanh:', error);
+                // Tiếp tục chạy timer ngay cả khi âm thanh lỗi
+                startTimer();
+            });
+            // Nếu không có lỗi âm thanh, vẫn gọi startTimer
             startTimer();
-            messageInfo.textContent = '';
         });
 
         document.getElementById('submit-test').addEventListener('click', submitTest);
 
         document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('test-audio').load();
+            const testAudio = document.getElementById('test-audio');
+            testAudio.load();
         });
     </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d8ba130a8fadcf',t:'MTc0Njg3MjY2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
