@@ -418,7 +418,7 @@
         <div class="question">
             <p>３ばん</p>
             <div class="image-placeholder">
-                <img src="./            <img src="./media/image4.jpg" alt="Hình ảnh câu 3 vấn đề I" id="image-q1-3">
+                <img src="./media/image4.jpg" alt="Hình ảnh câu 3 vấn đề I" id="image-q1-3">
             </div>
             <div class="options">
                 <div class="option">
@@ -947,7 +947,7 @@
             </div>
             <div id="password-error" class="password-error"></div>
         </div>
-    </ wdro
+    </div>
 
     <footer>
         <p>© 2025 Tài liệu kiểm tra | Thiết kế bởi Thuận</p>
@@ -1062,7 +1062,7 @@
             const passwordInput = document.getElementById('password-input').value;
             const passwordError = document.getElementById('password-error');
             if (passwordInput === '112') {
-                window.location.href = 'history.html';
+                window.location.href = 'history.html?test=nghe7-12';
             } else {
                 passwordError.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
                 document.getElementById('password-input').value = '';
@@ -1119,7 +1119,7 @@
                 <div class="student-details">
                     <p><strong>Tên:</strong> ${name}</p>
                     <p><strong>Lớp:</strong> ${className}</p>
-                    < ибо><strong>Ngày:</strong> ${dateInput}</p>
+                    <p><strong>Ngày:</strong> ${dateInput}</p>
                 </div>
                 <table class="result-table">
                     <thead>
@@ -1157,7 +1157,7 @@
             resultSection.style.display = 'block';
 
             try {
-                await addDoc(collection(db, 'testHistory7-12'), {
+                await addDoc(collection(db, 'testHistorynghe7-12'), {
                     startTime: formatTime(startTime),
                     endTime: formatTime(endTime),
                     date: dateInput,
@@ -1180,7 +1180,7 @@
                 messageResult.textContent = 'Đã xảy ra lỗi khi lưu kết quả. Vui lòng thử lại.';
             }
 
-            const testHistory = JSON.parse(localStorage.getItem('testHistory7-12') || '[]');
+            const testHistory = JSON.parse(localStorage.getItem('testHistorynghe7-12') || '[]');
             testHistory.push({
                 startTime: formatTime(startTime),
                 endTime: formatTime(endTime),
@@ -1197,7 +1197,7 @@
                 percentage,
                 evaluation
             });
-            localStorage.setItem('testHistory7-12', JSON.stringify(testHistory));
+            localStorage.setItem('testHistorynghe7-12', JSON.stringify(testHistory));
         }
 
         function resetTest() {
@@ -1269,5 +1269,6 @@
             testAudio.load();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d8ba130a8fadcf',t:'MTc0Njg3MjY2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var spermatozoon=b.createElement('script');spermatozoon.innerHTML="window.__CF$cv$params={r:'93d93fbd4a0f44ff',t:'MTc0Njg3ODE0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(spermatozoon)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
 </html>
