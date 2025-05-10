@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lịch sử kiểm tra - Test 7-12</title>
+    <title>Lịch sử kiểm tra</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
@@ -153,7 +153,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>Lịch sử kiểm tra - Test 7-12</h1>
+        <h1>Lịch sử kiểm tra</h1>
     </div>
 
     <div class="search-section">
@@ -253,7 +253,13 @@
             const historyTableBody = document.getElementById('history-table-body');
             const messageDiv = document.getElementById('message');
             let testHistory = [];
-            const collectionName = 'testHistory7-12'; // Chỉ lấy dữ liệu từ testHistory7-12
+            const urlParams = new URLSearchParams(window.location.search);
+            const test = urlParams.get('test') || '7-12'; // Mặc định là 7-12
+            const collectionName = `testHistory${test}`;
+
+            // Cập nhật tiêu đề động
+            document.title = `Lịch sử kiểm tra - Test ${test}`;
+            document.querySelector('.header h1').textContent = `Lịch sử kiểm tra - Test ${test}`;
 
             if (!db) {
                 messageDiv.textContent = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra cấu hình Firebase.';
@@ -261,7 +267,7 @@
             }
 
             try {
-                // Fetch data from testHistory7-12
+                // Fetch data from specified collection
                 const snapshot = await getDocs(collection(db, collectionName));
                 testHistory = snapshot.docs.map(doc => ({
                     id: doc.id,
