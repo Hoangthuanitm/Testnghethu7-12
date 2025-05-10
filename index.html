@@ -1115,10 +1115,11 @@
             const evaluation = getEvaluation(percentage);
             const rankClass = evaluation === 'A' ? 'rank-a' : evaluation === 'F' ? 'rank-f' : '';
 
+            // Chuỗi HTML được làm sạch để tránh lỗi ký tự
             const resultTable = `
                 <div class="student-details">
-                    <p><strong>Tên:</strong> ${name}</p>
-                    <p><strong>Lớp:</strong> ${className}</p>
+                    <p><strong>Tên:</strong> ${name.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+                    <p><strong>Lớp:</strong> ${className.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
                     <p><strong>Ngày:</strong> ${dateInput}</p>
                 </div>
                 <table class="result-table">
@@ -1269,6 +1270,5 @@
             testAudio.load();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var spermatozoon=b.createElement('script');spermatozoon.innerHTML="window.__CF$cv$params={r:'93d93fbd4a0f44ff',t:'MTc0Njg3ODE0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(spermatozoon)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
