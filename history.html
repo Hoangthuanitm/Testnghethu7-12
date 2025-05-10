@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lịch sử kiểm tra</title>
+    <title>Lịch sử kiểm tra - Test 7-12</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
@@ -153,12 +153,12 @@
 </head>
 <body>
     <div class="header">
-        <h1>Lịch sử kiểm tra</h1>
+        <h1>Lịch sử kiểm tra - Test 1-6</h1>
     </div>
 
     <div class="search-section">
         <label for="search">Tìm kiếm:</label>
-        <input type="text" id="search" placeholder="Nhập tên, lớp, ngày (YYYY-MM-DD) hoặc bộ bài kiểm tra">
+        <input type="text" id="search" placeholder="Nhập tên, lớp hoặc ngày (YYYY-MM-DD)">
     </div>
     <div id="message" class="error-message"></div>
 
@@ -169,7 +169,6 @@
                     <th>Thời gian bắt đầu</th>
                     <th>Thời gian kết thúc</th>
                     <th>Ngày</th>
-                    <th>Bộ bài kiểm tra</th>
                     <th>Tên</th>
                     <th>Lớp</th>
                     <th>問題 I</th>
@@ -215,15 +214,12 @@
             app = initializeApp(firebaseConfig);
             analytics = getAnalytics(app);
             db = getFirestore(app);
-            // Enable offline mode for Firestore
             enableIndexedDbPersistence(db).catch(err => {
                 console.warn('Không thể kích hoạt chế độ offline:', err);
             });
         } catch (error) {
             console.error('Lỗi khởi tạo Firebase:', error);
-            document.addEventListener('DOMContentLoaded', () => {
-                document.getElementById('message').textContent = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra cấu hình hoặc kết nối mạng.';
-            });
+            document.getElementById('message').textContent = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra cấu hình hoặc kết nối mạng.';
         }
 
         // Define Firestore functions
@@ -257,15 +253,7 @@
             const historyTableBody = document.getElementById('history-table-body');
             const messageDiv = document.getElementById('message');
             let testHistory = [];
-            const collections = [
-                'testHistory1-6',
-                'testHistory7-12',
-                'testHistory13-18',
-                'testHistory19-25',
-                'testHistory26-30',
-                'testHistory31-35',
-                'testHistory36-40'
-            ];
+            const collectionName = 'testHistory7-12'; // Chỉ lấy dữ liệu từ testHistory7-12
 
             if (!db) {
                 messageDiv.textContent = 'Không thể kết nối với cơ sở dữ liệu. Vui lòng kiểm tra cấu hình Firebase.';
@@ -273,20 +261,13 @@
             }
 
             try {
-                // Fetch data from all collections
-                for (const col of collections) {
-                    try {
-                        const snapshot = await getDocs(collection(db, col));
-                        const docs = snapshot.docs.map(doc => ({
-                            id: doc.id,
-                            collection: col,
-                            ...doc.data()
-                        }));
-                        testHistory = testHistory.concat(docs);
-                    } catch (error) {
-                        console.warn(`Không thể truy xuất collection ${col}:`, error.message);
-                    }
-                }
+                // Fetch data from testHistory7-12
+                const snapshot = await getDocs(collection(db, collectionName));
+                testHistory = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    collection: collectionName,
+                    ...doc.data()
+                }));
 
                 // Filter valid data before sorting
                 testHistory = testHistory.filter(entry => {
@@ -306,8 +287,7 @@
                     testHistory = testHistory.filter(entry =>
                         normalizeString(entry.name || '').includes(normalizedSearch) ||
                         normalizeString(entry.className || '').includes(normalizedSearch) ||
-                        normalizeString(entry.date || '').includes(normalizedSearch) ||
-                        normalizeString(entry.collection || '').includes(normalizedSearch)
+                        normalizeString(entry.date || '').includes(normalizedSearch)
                     );
                 }
 
@@ -321,7 +301,6 @@
                             <td>${entry.startTime || 'N/A'}</td>
                             <td>${entry.endTime || 'N/A'}</td>
                             <td>${entry.date || 'N/A'}</td>
-                            <td>${entry.collection}</td>
                             <td>${entry.name || 'N/A'}</td>
                             <td>${entry.className || 'N/A'}</td>
                             <td>${entry.section1 || 0}/${sectionPoints[1]}</td>
@@ -340,7 +319,7 @@
                 });
 
                 if (testHistory.length === 0) {
-                    historyTableBody.innerHTML = '<tr><td colspan="16">Không có dữ liệu lịch sử hoặc không thể truy xuất dữ liệu.</td></tr>';
+                    historyTableBody.innerHTML = '<tr><td colspan="15">Không có dữ liệu lịch sử hoặc không thể truy xuất dữ liệu.</td></tr>';
                 }
 
                 messageDiv.textContent = '';
@@ -369,7 +348,6 @@
             if (confirm('Bạn có chắc chắn muốn xóa kết quả này không?')) {
                 try {
                     await deleteDoc(doc(db, collectionName, docId));
-                    // Log delete event to Analytics
                     logEvent(analytics, 'delete_test_record', { doc_id: docId, collection: collectionName });
                     renderHistoryTable(document.getElementById('search')?.value.trim() || '');
                 } catch (error) {
@@ -386,12 +364,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Debug: Kiểm tra xem search-section có tồn tại không
-            const searchSection = document.querySelector('.search-section');
-            console.log('Search section:', searchSection);
             const searchInput = document.getElementById('search');
-            console.log('Search input:', searchInput);
-
             renderHistoryTable();
             if (searchInput) {
                 searchInput.addEventListener('input', () => {
