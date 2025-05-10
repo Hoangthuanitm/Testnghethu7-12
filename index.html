@@ -313,7 +313,7 @@
     <div class="header">
         <h1>総合テスト</h1>
         <h2>第7～12課（聴解）</h2>
-        <p>時間：25 分</p>
+        <p>時間：14 分</p>
     </div>
 
     <div class="student-info">
@@ -335,7 +335,7 @@
     <button id="history-test" type="button" onclick="window.showPasswordModal()">Lịch sử kiểm tra</button>
     <div id="message-info" class="error-message"></div>
 
-    <div id="timer" class="timer" style="display: none;">Thời gian còn lại: 25:00</div>
+    <div id="timer" class="timer" style="display: none;">Thời gian còn lại: 14:00</div>
 
     <div class="question-section">
         <h2>問題Ⅰ．もんだい１では、はじめに しつもんを きいて ください。それから、はなしをきいて、もんだいようしの １から４の なかから、いちばん いいものを ひとつ えらんで ください。（5*3=15）</h2>
@@ -1036,28 +1036,34 @@
         }
 
         function startTimer() {
-            startTime = new Date();
-            const endTime = new Date(startTime.getTime() + 25 * 60 * 1000); // Updated to 25 minutes
-            const timerElement = document.getElementById('timer');
+    startTime = new Date();
+    const totalTime = 14 * 60 * 1000; // 14 phút
+    const endTime = new Date(startTime.getTime() + totalTime); // Thời gian kết thúc
+    const timerElement = document.getElementById('timer');
 
-            timerInterval = setInterval(() => {
-                const now = new Date();
-                const timeLeft = endTime - now;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    timerElement.textContent = 'Hết giờ!';
-                    timerElement.classList.add('warning');
-                    submitTest();
-                    return;
-                }
-                const minutes = Math.floor(timeLeft / 1000 / 60);
-                const seconds = Math.floor((timeLeft / 1000) % 60);
-                timerElement.textContent = `Thời gian còn lại: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                if (timeLeft <= 5 * 60 * 1000) {
-                    timerElement.classList.add('warning');
-                }
-            }, 1000);
+    // Kiểm tra thời gian ban đầu để xác nhận
+    console.log('Thời gian bắt đầu:', startTime);
+    console.log('Thời gian kết thúc:', endTime);
+    console.log('Tổng thời gian (phút):', totalTime / 1000 / 60);
+
+    timerInterval = setInterval(() => {
+        const now = new Date();
+        const timeLeft = endTime - now;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerElement.textContent = 'Hết giờ!';
+            timerElement.classList.add('warning');
+            submitTest();
+            return;
         }
+        const minutes = Math.floor(timeLeft / 1000 / 60);
+        const seconds = Math.floor((timeLeft / 1000) % 60);
+        timerElement.textContent = `Thời gian còn lại: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        if (timeLeft <= 5 * 60 * 1000) {
+            timerElement.classList.add('warning');
+        }
+    }, 1000);
+}
 
         function checkPassword() {
             const passwordInput = document.getElementById('password-input').value;
